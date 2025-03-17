@@ -673,7 +673,7 @@ const Control = () => {
 							</View>
 						</View>
 					</View>
-					<Text className="pt-2 absolute -bottom-8 text-2xl text-yellow font-bold italic animate-pulse">
+					<Text className="absolute text-2xl bottom-0 text-yellow font-bold italic animate-pulse">
 						{isCooking && "Cooking..."}
 						{isDrying && "Drying..."}
 						{isTransferToDrying && "Transferring to Drying..."}
