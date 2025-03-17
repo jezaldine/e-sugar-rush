@@ -13,6 +13,7 @@ const Stat = () => {
 	const [isCookingRunning, setIsCookingRunning] = React.useState(false);
 	const [dryingTime, setDryingTime] = React.useState(0);
 	const [isDryingRunning, setIsDryingRunning] = React.useState(false);
+	const [temperature, setTemperature] = React.useState(0);
 
 	React.useEffect(() => {
 		getMainStorage();
@@ -75,6 +76,7 @@ const Stat = () => {
 	}, [isCookingRunning, cookingTime]);
 
 	useEffect(() => {
+		fetchTemperature();
 		if (!isDryingRunning || dryingTime <= 0) {
 			setIsDryingRunning(false);
 			return;
@@ -105,6 +107,15 @@ const Stat = () => {
 			2,
 			"0"
 		)}:${String(seconds).padStart(2, "0")}`;
+	};
+	const fetchTemperature = () => {
+		const valueRef = ref(database, "Sensors/temperature");
+		const subscribe = onValue(valueRef, (snapshot) => {
+			const value = snapshot.val();
+			setTemperature(value);
+		});
+
+		return () => subscribe();
 	};
 
 	const getMainStorage = async () => {
@@ -184,6 +195,14 @@ const Stat = () => {
 							</View>
 						</View>
 					</View>
+					<View className="w-full py-3 mt-7 bg-yellowGreen rounded-2xl justify-center items-center flex-row gap-3">
+							<Text className="text-white text-3xl font-semibold">
+								{Number(temperature).toFixed(2)}&#8451;
+							</Text>
+							<Text className="text-white text-3xl font-semibold">
+								Temperature
+							</Text>
+						</View>
 					<View className="w-full bg-white mb-4 mt-10 rounded-3xl py-3 justify-center items-center">
 						<Text className="text-primary font-bold text-xl text-center">
 							Remaining Time For Cooking

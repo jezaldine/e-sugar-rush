@@ -18,30 +18,30 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const toBoilJuiceData = [
 	{ label: "None", value: 0 },
-	{ label: "1 Litter", value: 1 },
-	{ label: "2 Litters", value: 2 },
-	{ label: "3 Litters", value: 3 },
-	{ label: "4 Litters", value: 4 },
-	{ label: "5 Litters", value: 5 },
-	{ label: "6 Litters", value: 6 },
-	{ label: "7 Litters", value: 7 },
-	{ label: "8 Litters", value: 8 },
-	{ label: "9 Litters", value: 9 },
-	{ label: "10 Litters", value: 10 },
-	{ label: "11 Litters", value: 10 },
-	{ label: "12 Litters", value: 10 },
-	{ label: "13 Litters", value: 10 },
-	{ label: "14 Litters", value: 10 },
-	{ label: "15 Litters", value: 10 },
+	{ label: "1 Liter", value: 1 },
+	{ label: "2 Liters", value: 2 },
+	{ label: "3 Liters", value: 3 },
+	{ label: "4 Liters", value: 4 },
+	{ label: "5 Liters", value: 5 },
+	{ label: "6 Liters", value: 6 },
+	{ label: "7 Liters", value: 7 },
+	{ label: "8 Liters", value: 8 },
+	{ label: "9 Liters", value: 9 },
+	{ label: "10 Liters", value: 10 },
+	{ label: "11 Liters", value: 10 },
+	{ label: "12 Liters", value: 10 },
+	{ label: "13 Liters", value: 10 },
+	{ label: "14 Liters", value: 10 },
+	{ label: "15 Liters", value: 10 },
 ];
 
 const toJuiceStorageData = [
 	{ label: "None", value: 0 },
-	{ label: "1 Litter", value: 1 },
-	{ label: "2 Litters", value: 2 },
-	{ label: "3 Litters", value: 3 },
-	{ label: "4 Litters", value: 4 },
-	{ label: "5 Litters", value: 5 },
+	{ label: "1 Liter", value: 1 },
+	{ label: "2 Liters", value: 2 },
+	{ label: "3 Liters", value: 3 },
+	{ label: "4 Liters", value: 4 },
+	{ label: "5 Liters", value: 5 },
 ];
 
 const Control = () => {
@@ -60,7 +60,6 @@ const Control = () => {
 	const [startTransfering, setStartTransfering] = React.useState(false);
 	const [isStartBoiling, setIsStartBoiling] = React.useState(false);
 	const [isStartTransfering, setIsStartTransfering] = React.useState(false);
-	const [temperature, setTemperature] = React.useState(0);
 	const [disable, setDisable] = React.useState(false);
 	const [isBloiling, setIsBoiling] = React.useState(false);
 	const [isTrasfering, setIsTransfering] = React.useState(false);
@@ -183,7 +182,6 @@ const Control = () => {
 		}
 		setBoiLJuiceSize();
 		setTransferJuiceSize();
-		fetchTemperature();
 		getPowerValue();
 		getExtractValue();
 		getFilteredValue();
@@ -276,16 +274,6 @@ const Control = () => {
 	const setTransferJuiceSize = async () => {
 		const valueRef = ref(database, "Sizes/transferSize");
 		await set(valueRef, toJuiceStorageValue);
-	};
-
-	const fetchTemperature = () => {
-		const valueRef = ref(database, "Sensors/temperature");
-		const subscribe = onValue(valueRef, (snapshot) => {
-			const value = snapshot.val();
-			setTemperature(value);
-		});
-
-		return () => subscribe();
 	};
 
 	const updateControls = async () => {
@@ -391,7 +379,7 @@ const Control = () => {
 					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
 				}
 			>
-				<View className="justify-center items-center">
+				<View className="justify-center items-center pb-8">
 					<Image source={logo.EsugarLogo} />
 					<View
 						className={`w-full   z-[2000px]  bg-white rounded-xl justify-center items-center py-6 gap-2 ${
@@ -522,14 +510,6 @@ const Control = () => {
 								/>
 								<Text className="text-white">Dry</Text>
 							</TouchableOpacity> */}
-						</View>
-						<View className="w-full py-3 mt-7 bg-yellowGreen rounded-2xl justify-center items-center flex-row gap-3">
-							<Text className="text-white text-3xl font-semibold">
-								{Number(temperature).toFixed(2)}&#8451;
-							</Text>
-							<Text className="text-white text-3xl font-semibold">
-								Temperature
-							</Text>
 						</View>
 						<View className="w-full pt-2 mt-4 px-8 gap-4 border-t-2 border-gray-300">
 							<Text className="text-center text-white font-bold text-xl">
