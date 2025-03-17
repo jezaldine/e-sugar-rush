@@ -47,7 +47,7 @@ const Setting = () => {
 			address,
 		};
 		const response = await axios.post(
-			"https://e-sugar-rush-server.vercel.app/update",
+			"https://e-sugar-rush-server-lac.vercel.app/update",
 			formData
 		);
 		if (response.status === 200) {

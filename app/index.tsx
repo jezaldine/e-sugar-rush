@@ -18,7 +18,7 @@ export default function Index() {
 					return;
 				}
 				await axios
-					.post("https://e-sugar-rush-server.vercel.app/userdata", {
+					.post("https://e-sugar-rush-server-lac.vercel.app/userdata", {
 						token: token,
 					})
 					.then(async (res) => {

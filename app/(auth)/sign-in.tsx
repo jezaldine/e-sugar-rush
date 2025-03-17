@@ -48,7 +48,7 @@ const SignIn = () => {
 		};
 		try {
 			axios
-				.post("https://e-sugar-rush-server.vercel.app/auth/login", data)
+				.post("https://e-sugar-rush-server-lac.vercel.app/auth/login", data)
 				.then(async (res) => {
 					console.log({ data: res.data });
 					if (res.data.status === "ok") {

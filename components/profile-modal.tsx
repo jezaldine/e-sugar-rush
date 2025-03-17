@@ -26,7 +26,7 @@ const ProfileModal = ({ Style, components }: Props) => {
 
 	async function getData() {
 		axios
-			.get("https://e-sugar-rush-server.vercel.app/get-all-user")
+			.get("https://e-sugar-rush-server-lac.vercel.app/get-all-user")
 			.then((res) => {
 				setUserData(res.data.data);
 			});
