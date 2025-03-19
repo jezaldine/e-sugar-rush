@@ -20,6 +20,7 @@ import Transfering from "@/assets/icons/transfering.gif";
 import User from "@/assets/icons/user.png";
 import boil from "@/assets/icons/boil.png"
 import pulverize from "@/assets/icons/pulverize.png"
+import push from "@/assets/icons/push.png"
 
 const icons = {
 	Eye,
@@ -43,7 +44,8 @@ const icons = {
 	Transfering,
 	Filtered,
 	boil,
-	pulverize
+	pulverize,
+	push
 };
 
 export default icons;

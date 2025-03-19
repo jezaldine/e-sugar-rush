@@ -86,6 +86,8 @@ const Control = () => {
 	const [isDry, setIsDry] = React.useState(false);
 	const [isPulverize, setIsPulverize] = React.useState(false);
 	const [pulverize, setPulverize] = React.useState(false);
+	const [push, setPush] = React.useState(false);
+	const [isPush, setIsPush] = React.useState(false);
 	
 
 	useEffect(() => {
@@ -197,6 +199,7 @@ const Control = () => {
 		getStartTransferingValue();
 		getJuiceStorageValue();
 		getDryValue();
+		getPushValue();
 		getPulverizeValue();
 		if (!isPower) {
 			setDisable(true);
@@ -291,12 +294,14 @@ const Control = () => {
 		const filteredValue = ref(database, "Controls/filtered");
 		const boilValue = ref(database, "Controls/boil");
 		const dryValue = ref(database, "Controls/dry");
-		const pulverizeValue = ref(database, "Controls/pulvorize");
+		const pulverizeValue = ref(database, "Controls/pulverize");
+		const pushValue = ref(database, "Controls/push");
 		await set(extractValueRef, false);
 		await set(filteredValue, false);
 		await set(boilValue, false);
 		await set(dryValue, false);
 		await set(pulverizeValue, false);
+		await set(pushValue, false);
 	};
 
 	const getStartExtractionValue = async () => {
@@ -327,6 +332,11 @@ const Control = () => {
 		const valueRef = ref(database, "Controls/extract");
 		const value = await get(valueRef);
 		setIsExtract(value.val());
+	};
+	const getPushValue = async () => {
+		const valueRef = ref(database, "Controls/push");
+		const value = await get(valueRef);
+		setIsPush(value.val());
 	};
 	const getBoilValue = async () => {
 		const valueRef = ref(database, "Controls/boil");
@@ -375,6 +385,12 @@ const Control = () => {
 		await set(valueRef, dry ? true : false);
 		setDry((prev) => !prev);
 		setIsDry(extract);
+	};
+	const activePush = async () => {
+		const valueRef = ref(database, "Controls/push");
+		await set(valueRef, push ? true : false);
+		setPush((prev) => !prev);
+		setIsPush(push);
 	};
 	const activePulverize = async () => {
 		const valueRef = ref(database, "Controls/pulverize");
@@ -567,6 +583,11 @@ const Control = () => {
 									isDry && "bg-yellow"
 								}`}
 							></View>
+						<View
+								className={`w-4 h-4 border-[1px] border-gray-300 items-start rounded-full ${
+									isPush && "bg-yellow"
+								}`}
+							></View>
 							
 							<View
 								className={`w-4 h-4 border-[1px] border-gray-300 rounded-full ${
@@ -593,6 +614,25 @@ const Control = () => {
 									source={icons.Dry}
 								/>
 								<Text className="text-white">Dry</Text>
+							</TouchableOpacity>
+						<TouchableOpacity
+								disabled={
+									disable 
+								}
+								onPress={activePush}
+								className={`rounded-2xl  w-24 gap-1 py-2 px-4 justify-center items-center ${
+									disable 
+										? "bg-gray-500"
+										: "bg-primary"
+								}`}
+							>
+								<Image
+									className="w-8 h-8"
+									resizeMode="contain"
+									tintColor="#fff"
+									source={icons.push}
+								/>
+								<Text className="text-white">Push</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
 								disabled={
