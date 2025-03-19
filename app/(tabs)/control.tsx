@@ -651,7 +651,7 @@ const Control = () => {
 									tintColor="#fff"
 									source={icons.pulverize}
 								/>
-								<Text className="text-white">Pulerize</Text>
+								<Text className="text-white">Pulverize</Text>
 							</TouchableOpacity>
 						</View>
 						<View className="w-full pt-2 mt-4 px-8 gap-4 border-t-2 border-gray-300">
