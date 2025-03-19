@@ -80,6 +80,13 @@ const Control = () => {
 	const [isTransferToPulvorizer, setIsTransferToPulvorizer] =
 		React.useState(false);
 	const [isPulvorizer, setIsPulvorizer] = React.useState(false);
+	const [boil, setBoil] =React.useState(false);
+	const [isBoil, setIsBoil] = React.useState(false);
+	const [dry, setDry] = React.useState(false);
+	const [isDry, setIsDry] = React.useState(false);
+	const [isPulverize, setIsPulverize] = React.useState(false);
+	const [pulverize, setPulverize] = React.useState(false);
+	
 
 	useEffect(() => {
 		const timeRef = ref(database, "Timer/juiceToBoiler");
@@ -183,11 +190,14 @@ const Control = () => {
 		setBoiLJuiceSize();
 		setTransferJuiceSize();
 		getPowerValue();
+		getBoilValue();
 		getExtractValue();
 		getFilteredValue();
 		getStartExtractionValue();
 		getStartTransferingValue();
 		getJuiceStorageValue();
+		getDryValue();
+		getPulverizeValue();
 		if (!isPower) {
 			setDisable(true);
 			updateControls();
@@ -279,8 +289,14 @@ const Control = () => {
 	const updateControls = async () => {
 		const extractValueRef = ref(database, "Controls/extract");
 		const filteredValue = ref(database, "Controls/filtered");
+		const boilValue = ref(database, "Controls/boil");
+		const dryValue = ref(database, "Controls/dry");
+		const pulverizeValue = ref(database, "Controls/pulvorize");
 		await set(extractValueRef, false);
 		await set(filteredValue, false);
+		await set(boilValue, false);
+		await set(dryValue, false);
+		await set(pulverizeValue, false);
 	};
 
 	const getStartExtractionValue = async () => {
@@ -312,10 +328,26 @@ const Control = () => {
 		const value = await get(valueRef);
 		setIsExtract(value.val());
 	};
+	const getBoilValue = async () => {
+		const valueRef = ref(database, "Controls/boil");
+		const value = await get(valueRef);
+		setIsBoil(value.val());
+	};
+
 	const getFilteredValue = async () => {
 		const valueRef = ref(database, "Controls/filtered");
 		const value = await get(valueRef);
 		setIsToMainStorage(value.val());
+	};
+	const getDryValue = async () => {
+		const valueRef = ref(database, "Controls/dry");
+		const value = await get(valueRef);
+		setIsDry(value.val());
+	};
+	const getPulverizeValue = async () => {
+		const valueRef = ref(database, "Controls/pulverize");
+		const value = await get(valueRef);
+		setIsPulverize(value.val());
 	};
 
 	const onRefresh = React.useCallback(() => {
@@ -338,6 +370,18 @@ const Control = () => {
 		setExtract((prev) => !prev);
 		setIsExtract(extract);
 	};
+	const activeDry = async () => {
+		const valueRef = ref(database, "Controls/dry");
+		await set(valueRef, dry ? true : false);
+		setDry((prev) => !prev);
+		setIsDry(extract);
+	};
+	const activePulverize = async () => {
+		const valueRef = ref(database, "Controls/pulverize");
+		await set(valueRef, pulverize ? true : false);
+		setPulverize((prev) => !prev);
+		setIsPulverize(extract);
+	};
 
 	const activePumpToMainStorage = async () => {
 		const valueRef = ref(database, "Controls/filtered");
@@ -346,11 +390,18 @@ const Control = () => {
 		setIsToMainStorage(toMainSorage);
 	};
 
+	const activeBoiler = async () => {
+		const valueRef = ref(database, "Controls/boil")
+		await set(valueRef, boil ? true: false);
+		setBoil((prev) => !prev);
+		setIsBoil(boil);
+	}
+
 	const activeStartExtraction = async () => {
 		const valueRef = ref(database, "Controls/startExtraction");
 		await set(valueRef, startExtraction ? true : false);
 		setStartExtraction((prev) => !prev);
-		setIsStartBoiling(startExtraction);
+		 (startExtraction);
 	};
 
 	const activeStartTransfering = async () => {
@@ -413,28 +464,15 @@ const Control = () => {
 									isPower && "bg-red-500"
 								}`}
 							></View>
-							<View
-								className={`w-4 h-4 border-[1px] border-gray-300 rounded-full ${
-									isExtract && "bg-yellow"
-								}`}
-							></View>
-							<View
-								className={`w-4 h-4 border-[1px] border-gray-300 rounded-full ${
-									isToMainSorage && "bg-yellow"
-								}`}
-							></View>
+							
+							
 						</View>
 						<Text className="text-white text-lg text-center mb-4">
 							MAIN CONTROLS
 						</Text>
 						<TouchableOpacity
 							onPress={activePower}
-							disabled={isTransferingWorking || isCooking || isDrying}
-							className={`flex-row gap-2 items-center justify-center py-2 w-full rounded-2xl ${
-								isTransferingWorking || isCooking || isDrying
-									? "bg-gray-300"
-									: "bg-white"
-							} `}
+							className="flex-row gap-2 items-center justify-center py-2 w-full rounded-2xl bg-white"
 						>
 							<Text className="text-2xl font-bold text-textColor ">Power</Text>
 							<Image
@@ -444,14 +482,32 @@ const Control = () => {
 								source={icons.Power}
 							/>
 						</TouchableOpacity>
-						<View className="flex-row items-center mt-2 justify-center gap-10">
+						<View className="flex-row items-center justify-between justify-around pt-2">
+						<View
+								className={`w-4 h-4 border-[1px] border-gray-300 items-start rounded-full ${
+									isExtract && "bg-yellow"
+								}`}
+							></View>
+							<View
+								className={`w-4 h-4 border-[1px] border-gray-300 rounded-full ${
+									isToMainSorage && "bg-yellow"
+								}`}
+							></View>
+							<View
+								className={`w-4 h-4 border-[1px] border-gray-300 rounded-full ${
+									isBoil && "bg-yellow"
+								}`}
+							></View>
+						</View>
+						<View className="flex-row items-center mt-2 justify-between gap-2">
+						
 							<TouchableOpacity
 								disabled={
-									disable || isTransferingWorking || isCooking || isDrying
+									disable 
 								}
 								onPress={activeExtract}
 								className={`rounded-2xl w-24 gap-1 py-2 px-4 justify-center items-center ${
-									disable || isTransferingWorking || isCooking || isDrying
+									disable 
 										? "bg-gray-500"
 										: "bg-primary"
 								}`}
@@ -466,19 +522,13 @@ const Control = () => {
 							</TouchableOpacity>
 							<TouchableOpacity
 								disabled={
-									disable ||
-									isTransferingWorking ||
-									isCooking ||
-									isDrying ||
-									disableFilteredButton
+									disable
+									
 								}
 								onPress={activePumpToMainStorage}
 								className={`rounded-2xl  w-24 gap-1 py-2 px-4 justify-center items-center ${
-									disable ||
-									isTransferingWorking ||
-									isCooking ||
-									isDrying ||
-									disableFilteredButton
+									disable
+									
 										? "bg-gray-500"
 										: "bg-primary"
 								}`}
@@ -491,13 +541,47 @@ const Control = () => {
 								/>
 								<Text className="text-white">Filtered</Text>
 							</TouchableOpacity>
-							{/* <TouchableOpacity
+							<TouchableOpacity
 								disabled={
-									disable || isTransferingWorking || isCooking || isDrying
+									disable 
+								}
+								onPress={activeBoiler}
+								className={`rounded-2xl  w-24 gap-1 py-2 px-4 justify-center items-center ${
+									disable 
+										? "bg-gray-500"
+										: "bg-primary"
+								}`}
+							>
+								<Image
+									className="w-8 h-8"
+									resizeMode="contain"
+									tintColor="#fff"
+									source={icons.boil}
+								/>
+								<Text className="text-white">Boil</Text>
+							</TouchableOpacity>
+						</View>
+						<View className="flex-row items-center justify-between justify-around pt-2">
+						<View
+								className={`w-4 h-4 border-[1px] border-gray-300 items-start rounded-full ${
+									isDry && "bg-yellow"
+								}`}
+							></View>
+							
+							<View
+								className={`w-4 h-4 border-[1px] border-gray-300 rounded-full ${
+									isPulverize && "bg-yellow"
+								}`}
+							></View>
+						</View>
+						<View className="flex-row items-center mt-2 justify-center gap-2">
+						<TouchableOpacity
+								disabled={
+									disable 
 								}
 								onPress={activeDry}
 								className={`rounded-2xl  w-24 gap-1 py-2 px-4 justify-center items-center ${
-									disable || isTransferingWorking || isCooking || isDrying
+									disable 
 										? "bg-gray-500"
 										: "bg-primary"
 								}`}
@@ -509,7 +593,26 @@ const Control = () => {
 									source={icons.Dry}
 								/>
 								<Text className="text-white">Dry</Text>
-							</TouchableOpacity> */}
+							</TouchableOpacity>
+							<TouchableOpacity
+								disabled={
+									disable 
+								}
+								onPress={activePulverize}
+								className={`rounded-2xl  w-24 gap-1 py-2 px-4 justify-center items-center ${
+									disable 
+										? "bg-gray-500"
+										: "bg-primary"
+								}`}
+							>
+								<Image
+									className="w-8 h-8"
+									resizeMode="contain"
+									tintColor="#fff"
+									source={icons.pulverize}
+								/>
+								<Text className="text-white">Pulerize</Text>
+							</TouchableOpacity>
 						</View>
 						<View className="w-full pt-2 mt-4 px-8 gap-4 border-t-2 border-gray-300">
 							<Text className="text-center text-white font-bold text-xl">

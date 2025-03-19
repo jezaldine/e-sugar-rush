@@ -18,6 +18,8 @@ import Setting from "@/assets/icons/setting.png";
 import Stat from "@/assets/icons/stat.png";
 import Transfering from "@/assets/icons/transfering.gif";
 import User from "@/assets/icons/user.png";
+import boil from "@/assets/icons/boil.png"
+import pulverize from "@/assets/icons/pulverize.png"
 
 const icons = {
 	Eye,
@@ -40,6 +42,8 @@ const icons = {
 	Profile,
 	Transfering,
 	Filtered,
+	boil,
+	pulverize
 };
 
 export default icons;
